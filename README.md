@@ -4,4 +4,6 @@ Este projeto visa facilitar a contagem de pedidos de almoço realizados via what
 
 Padrão adotado: \*Nome:\* (tamanho) (quantidade): Menu
 
+Exporte o arquivo .txt da conversa, renomeie para 'almoco.txt' e substitua o arquivo base. 
+
 
