@@ -41,11 +41,13 @@ def extrai_nome(linha):
 
 
 def extrai_valor(linha):
+    PEQUENO = '$6.00'
+    GRANDE = '$8.00'
     try:
-        if findall(r"\((\w{6,7})\)", linha)[0].capitalize() == 'Pequeno':
-            return '$6.00'
+        if findall(r"\((\w+)\)", linha)[0][0:3].capitalize() == 'Peq':
+            return PEQUENO
         else:
-            return '$8.00'
+            return GRANDE
     except IndexError:
         pass
 
@@ -58,6 +60,8 @@ def extrai_quantidade(linha):
 
 
 def grava_dados_em_csv(dado):
+    cria_csv = open('almoco.csv', 'w+', encoding='utf-8')
+    cria_csv.close()
     carrega_csv = open('almoco.csv', 'r')
     lista_csv = list(csv.reader(carrega_csv))
     carrega_csv.close()

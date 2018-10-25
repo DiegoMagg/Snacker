@@ -10,15 +10,22 @@ from almoco import (
 
 
 class ArquivoTxt(unittest.TestCase):
-
     dados = None
 
     def setUp(self):
-        arquivo_txt = abre_arquivo_txt('almoco_teste.txt', 'r')
-        self.dados = arquivo_txt.readline()
-        arquivo_txt.close()
+        try:
+            arquivo_txt = open('almoco_teste.txt', 'r')
+            self.dados = arquivo_txt.readline()
+            arquivo_txt.close()
+        except FileNotFoundError:
+            with open('almoco_test.txt', 'w', encoding='utf-8') as txt:
+                txt.write('10/9/18, 11:04 AM - Nome: *Nome:* (pequeno) (1); Menu.')
+                txt.close()
+            arquivo_txt = open('almoco_test.txt', 'r', encoding='utf-8')
+            self.dados = arquivo_txt.readline()
+            arquivo_txt.close()
 
-    def test_dado_deve_ser_uma_sting(self):
+    def test_dado_deve_ser_uma_string(self):
         self.assertIs(str, type(self.dados))
 
     def test_data_deve_ser_obtida(self):
