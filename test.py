@@ -1,7 +1,6 @@
 import unittest
 from almoco import (
-    abre_arquivo_txt,
-    coleta_pedido,
+    executa_extracao,
     extrai_data,
     extrai_nome,
     extrai_quantidade,
@@ -38,16 +37,16 @@ class ArquivoTxt(unittest.TestCase):
 
     def test_valor_do_pedido_deve_ser_extraido(self):
         valor = extrai_valor(self.dados)
-        self.assertEqual('$6.00', valor)
+        self.assertEqual('R$6.00', valor)
 
     def test_quantidade_deve_ser_extraida(self):
         quantidade = extrai_quantidade(self.dados)
         self.assertEqual('1', quantidade)
 
     def test_deve_retornar_dict_com_os_dados_corretamente(self):
-        pedido_completo = coleta_pedido(self.dados)
+        pedido_completo = executa_extracao('almoco_test.txt')
         self.assertEqual(
-            {'Data': '10/9/18', 'Nome': 'Nome', 'Valor': '$6.00', 'Quantidade': '1'},
+            {'Data': '10/9/18', 'Nome': 'Nome', 'Valor': 'R$6.00', 'Quantidade': '1'},
             pedido_completo
         )
 
