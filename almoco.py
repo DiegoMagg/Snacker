@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from re import findall
 import pandas
 
@@ -15,11 +17,12 @@ def executa_interface():
                 arquivo = filedialog.askopenfilename(
                     title="Selecionar arquivo",
                     filetypes=(("Arquivo TXT", "*.txt"),))
-                if arquivo == '':
+                if not arquivo:
                     warn = messagebox.askquestion(
                         "Aviso", "Nenhum arquivo importado, deseja tentar novamente?"
                     )
-                    if warn == 'Yes':
+                    if warn == 'yes':
+                        arquivo = ''
                         continue
                     else:
                         master.destroy()
@@ -36,10 +39,14 @@ def executa_interface():
 
 
 def abre_arquivo_txt(arquivo, modo):
-    return open(arquivo, modo, encoding="utf-8")
+    try:
+        arquivo = open(arquivo, modo, encoding="utf-8")
+    except FileNotFoundError:
+        print('Bye')
+    return arquivo
 
 
-def executa_extracao(arquivo):
+def executa_extracao(arquivo, test=False):
     extracoes = []
     arquivo = abre_arquivo_txt(arquivo, 'r')
     linhas = arquivo.readlines()
@@ -99,4 +106,6 @@ def grava_dados_em_csv(extracoes):
     data.to_csv('almoco.csv', mode='a', index=False, header=True)
 
 
-executa_interface()
+if __name__ == '__main__':
+    executa_interface()
+

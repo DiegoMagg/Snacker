@@ -24,3 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+
+# project_especific
+almoco_test.txt
+almoco.csv
