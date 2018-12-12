@@ -23,7 +23,7 @@ $ pipenv run python almoco.py
 Se você não possuir o tkinter instalado, o script funcionará pelo terminal, caso
 deseje a interface gráfica instale o tkinter com o comando:
 ```sh
-$sudo apt install tkinter
+$sudo apt install python3-tk
 ``` 
 
 Outros comandos:
