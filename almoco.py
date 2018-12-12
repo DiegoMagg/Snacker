@@ -2,6 +2,8 @@
 
 from re import findall
 import pandas
+import sys
+from PIL import ImageTk, Image
 
 
 def executa_interface():
@@ -10,8 +12,11 @@ def executa_interface():
         from tkinter import filedialog, messagebox
         master = tk.Tk()
         master.title('Snacker')
+        logo = ImageTk.PhotoImage(Image.open('cairo92.png'))
+        cairo = tk.Label(master, image=logo)
+        cairo.pack(side="top", fill="both", expand="no")
 
-        def abre_arquivo():
+        def abre_arquivo(mes):
             arquivo = ''
             while arquivo == '':
                 arquivo = filedialog.askopenfilename(
@@ -26,13 +31,46 @@ def executa_interface():
                         continue
                     else:
                         master.destroy()
-                        break
+                        sys.exit()
             executa_extracao(arquivo)
             messagebox.showinfo("Completo", "Sua planilha foi exportada!")
-        f = tk.Frame(master, height=200, width=300)
+        f = tk.Frame(master, height=50, width=300)
         f.pack()
-        b = tk.Button(master, text="Abrir arquivo", command=abre_arquivo)
-        b.pack(side="top", fill='both', expand=True, padx=4, pady=4)
+        choices = {
+            'Janeiro': '01',
+            'Março': '02',
+            'Fevereiro': '03',
+            'Abril': '04',
+            'Maio': '05',
+            'Junho': '06',
+            'Julho': '07',
+            'Agosto': '08',
+            'Setembro': '09',
+            'Outubro': '10',
+            'Novembro': '11',
+            'Dezembro': '12',
+        }
+        mes = tk.StringVar(master)
+        mes.set(next(iter(choices)))
+        seleciona_mes = tk.OptionMenu(
+            master,
+            mes,
+            'Janeiro',
+            'Março',
+            'Fevereiro',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+        )
+        seleciona_mes.pack()
+        b = tk.Button(master, text="Abrir arquivo", command=lambda: abre_arquivo(choices[mes.get()]))
+        b.pack(side="top", fill='both', expand=False, padx=4, pady=4)
         master.mainloop()
     except ModuleNotFoundError:
         executa_extracao(input(str('Digite o nome do arquivo: ')))
@@ -48,19 +86,22 @@ def abre_arquivo_txt(arquivo, modo):
 
 def executa_extracao(arquivo, test=False):
     extracoes = []
-    arquivo = abre_arquivo_txt(arquivo, 'r')
-    linhas = arquivo.readlines()
-    arquivo.close()
-    for linha in linhas:
-        encontra_dados = {
-                'Data': extrai_data(linha),
-                'Nome': extrai_nome(linha),
-                'Valor': extrai_valor(linha),
-                'Quantidade': extrai_quantidade(linha),
-        }
-        if encontra_dados['Nome'] and encontra_dados['Valor']:
-            extracoes.append(tuple(encontra_dados.values()))
-    grava_dados_em_csv(extracoes)
+    if arquivo:
+        arquivo = abre_arquivo_txt(arquivo, 'r')
+        linhas = arquivo.readlines()
+        arquivo.close()
+        for linha in linhas:
+            encontra_dados = {
+                    'Data': extrai_data(linha),
+                    'Nome': extrai_nome(linha),
+                    'Valor': extrai_valor(linha),
+                    'Quantidade': extrai_quantidade(linha),
+            }
+            if encontra_dados['Nome'] and encontra_dados['Valor']:
+                extracoes.append(tuple(encontra_dados.values()))
+        grava_dados_em_csv(extracoes)
+    else:
+        sys.exit()
     return encontra_dados
 
 
@@ -108,4 +149,3 @@ def grava_dados_em_csv(extracoes):
 
 if __name__ == '__main__':
     executa_interface()
-
